@@ -2,8 +2,50 @@ import Paint from "./Paint.js";
 
 class Geometry {
 
+    static simpleIntersect(pointA, pointB,line, pointP) {
+
+        //let line = this.lineFrom2Points(pointA,pointB);
+        let eq = line.a*pointP.x + line.b*pointP.y + line.c;
+        if (Math.abs(eq) > 1) return 0;
+        else return 1;
+
+        // Oblicz odległość między punktami A i P
+        const distanceAP = Math.sqrt(
+            Math.pow(pointP.x - pointA.x, 2) + Math.pow(pointP.y - pointA.y, 2)
+        );
+
+        // Oblicz odległość między punktami A i B
+        const distanceAB = Math.sqrt(
+            Math.pow(pointB.x - pointA.x, 2) + Math.pow(pointB.y - pointA.y, 2)
+        );
+
+        // Oblicz odległość między punktami B i P
+        const distanceBP = Math.sqrt(
+            Math.pow(pointP.x - pointB.x, 2) + Math.pow(pointP.y - pointB.y, 2)
+        );
+
+        // Sprawdź warunek, czy punkt P leży na odcinku z dokładnością do 1
+        if (Math.abs(distanceAP + distanceBP - distanceAB) <= 0.1) {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
+
+    static lineFrom2Points(p1, p2) {
+        let a = p1.y - p2.y;
+        let b = - p1.x + p2.x;
+        let c = p1.x * p2.y - p2.x * p1.y;
+        return { a: a, b: b, c: c };
+    }
 
     static lineSquareIntersect(l1, l2, sq1) {
+
+        let line = this.lineFrom2Points(l1,l2);
+        let eq = line.a*sq.x + line.b*sq.y + line.c;
+        if (Math.abs(eq) > 1) return 0;
+
+
         let p1 = {x: sq1.x, y: sq1.y};
         let p2 = {x: sq1.x+1, y: sq1.y};
         let p3 = {x: sq1.x+1, y: sq1.y+1};
@@ -21,21 +63,6 @@ class Geometry {
         if (i4) points.push(i4);
 
         if (points.length == 4) console.log("4!!!")
-/*
-        if (points.length == 3) {
-            if (points[2].x != points[1].x || points[2].y != points[1].y) {
-                console.log("biore",points[2],points[1])
-                return this.distanceTwoPoints(points[2], points[1]);
-            } else if (points[2].x != points[0].x || points[2].y != points[0].y) {
-                console.log("biore",points[2],points[0])
-                return this.distanceTwoPoints(points[2], points[0]);
-            } else if (points[1].x != points[0].x || points[1].y != points[0].y) {
-                console.log("biore",points[1],points[0])
-                return this.distanceTwoPoints(points[1], points[0]);
-            }
-        }
-
- */
         if (points.length != 2) return 0;
         return this.distanceTwoPoints(points[0], points[1]);
     }

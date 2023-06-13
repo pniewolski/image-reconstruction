@@ -1,7 +1,7 @@
 class Paint {
     static initContext() {
         this.shift = 0;
-        this.canvSize = 1600;
+        this.canvSize = 1200;
         this.canvas = document.createElement('canvas');
         this.canvas.width = this.canvSize;
         this.canvas.height = this.canvSize;
@@ -30,9 +30,9 @@ class Paint {
         ctx.stroke();
     }
 
-    static drawTestImage(bitmap, shX = 0, shY = 0, scale = 1, imaginary = false ) {
+    static drawTestImage(bitmap, shX = 0, shY = 0, scale = 1, imaginary = false, fixedRange = false) {
         let ctx = this.getInstanceCtx();
-        let range = imaginary ? this.analyzeDataRangeImag(bitmap) : this.analyzeDataRange(bitmap);
+        let range = imaginary ? 0 : this.analyzeDataRange(bitmap, fixedRange);
         for (let x = 0; x < bitmap.length; x++) {
             for (let y = 0; y < bitmap[x].length; y++) {
                 //ctx.fillStyle = "rgb("+(255-bitmap[x][y]*115)+","+(255-bitmap[x][y]*115)+","+(255-bitmap[x][y]*115)+")";
@@ -42,7 +42,14 @@ class Paint {
         }
     }
 
-    static analyzeDataRange(array) {
+    static analyzeDataRange(array, fixedRange) {
+        if (fixedRange) {
+            return {
+                min: -0.2,
+                max: 0.2,
+                mul: 640,
+            }
+        }
         let min = array[0][0];
         let max = array[0][0];
         for (let x=0; x<array.length; x++) {
@@ -59,49 +66,33 @@ class Paint {
         return result;
     }
 
-    static analyzeDataRangeImag(array) {
-        let min = array[0][0].real;
-        let max = array[0][0].real;
-        let minI = array[0][0].imag;
-        let maxI = array[0][0].imag;
-        for (let x=0; x<array.length; x++) {
-            for (let y=0; y<array[x].length; y++) {
-                if (array[x][y].real < min) min = array[x][y].real;
-                if (array[x][y].real > max) max = array[x][y].real;
-                if (array[x][y].imag < minI) minI = array[x][y].imag;
-                if (array[x][y].imag > maxI) maxI = array[x][y].imag;
-            }
-        }
-        let result = {
-            min,
-            max,
-            mul: 255/Math.abs(min-max),
-            minI,
-            maxI,
-            mulI: 255/Math.abs(minI-maxI),
-        }
-        return result;
-    }
-
     static pickColor(range,value) {
-        let final = 255-(value-range.min)*range.mul;
+        let final = (value-range.min)*range.mul;
+        if (final < 0) final = 0;
+        if (final > 255) final = 255;
         return 'rgb('+final+','+final+','+final+')';
     }
 
     static pickColorImag(range,value) {
-        let final = 255-(value.real-range.min)*range.mul;
-        let finalI = 255-(value.imag-range.minI)*range.mulI;
-        return 'rgb('+final+','+finalI+','+255+')';
+        let final = (value.real+20)*6;
+        if (final < 0) final = 0;
+        if (final > 255) final = 255;
+
+        let finali = (value.imag+20)*6;
+        if (finali < 0) finali = 0;
+        if (finali > 255) finali = 255;
+        // /console.log(value.real, final);
+        return 'rgb('+final+','+final+','+finali+')';
     }
 
-    static drawPolarImage(array,stepAngle, rayres, bitmapSize, shX = 0, shY = 0, scale = 1, imaginary = false) {
+    static drawPolarImage(array,stepAngle, rayres, bitmapSize, shX = 0, shY = 0, scale = 1, imaginary = false, fixedRange = false) {
         let ctx = this.getInstanceCtx();
         let halfBitmap = bitmapSize / 2;
         let center = {
             x: halfBitmap,
             y: halfBitmap,
         };
-        let range = imaginary ? this.analyzeDataRangeImag(array) : this.analyzeDataRange(array);
+        let range = imaginary ? 0 : this.analyzeDataRange(array, fixedRange);
         let angle = 0 - stepAngle/2 + Math.PI/2;
         for (let a = 0; a< array.length; a++) {
             let startAngle = angle;
