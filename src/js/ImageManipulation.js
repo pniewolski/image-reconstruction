@@ -88,6 +88,20 @@ class ImageManipulation {
             return image;
         }
 
+        static cutoffEdgesComplex(image) {
+            let r = image.length/2;
+            for (let x=0; x<image.length; x++) {
+                for (let y=0; y<image[0].length; y++) {
+                    if ((x-r)**2 + (y-r)**2 > ((r)**2)) {
+                        //image[x][y] = {re: 0, im: 0};
+                        image[x][y].re = 0;
+                        image[x][y].im = 0;
+                    }
+                }
+            }
+            return image;
+        }
+
         static processSinogram(sinogram, angleStep, anglesCount) {
             let result = this.getImageFromSimogram(sinogram,0,angleStep);
             for (let n=1; n<anglesCount; n++) {
@@ -98,15 +112,49 @@ class ImageManipulation {
             return result;
         }
 
-        static shiftArray(inputArr) {
-            let shiftVal = Math.floor(inputArr.length/4);
-            let result = [];
-            for (let i = 0; i< inputArr.length; i++) {
-                let index = (i+shiftVal)%inputArr.length;
-                result.push(inputArr[index]);
+    static shiftArray(inputArr) {
+        let shiftVal = Math.floor(inputArr.length/2);
+        let shiftValY = Math.floor(inputArr[0].length/2);
+        let result = [];
+        for (let i = 0; i< inputArr.length; i++) {
+            let index = (i+shiftVal)%inputArr.length;
+            let row = [];
+            for(let j = 0; j< inputArr[index].length; j++) {
+                let indexJ = (j+shiftValY)%inputArr[index].length;
+                row.push(inputArr[index][indexJ]);
             }
-            return result;
+            result.push(row);
         }
+        return result;
+    }
+
+    static flipArray(inputArr) {
+        let shiftVal = Math.floor(inputArr.length/2);
+        let result = [];
+        for (let i = 0; i< inputArr.length; i++) {
+            let index = inputArr.length - i - 1;
+            result.push(inputArr[index]);
+        }
+        return result;
+    }
+
+    static arrayDiffComplex(a1,a2) {
+        let result = [];
+        for (let x=0; x<a1.length; x++) {
+            let row = [];
+            for (let y=0; y<a1[0].length; y++) {
+                let diff = {
+                    re: a1[x][y].re / a2[x][y].re,
+                    im: a1[x][y].im / a2[x][y].im,
+                }
+                row.push(diff);
+                //let real = Math.sqrt(diff.re**2 + diff.im**2);
+                //row.push(real);
+            }
+            result.push(row)
+        }
+        return result;
+    }
 }
 
 export default ImageManipulation;

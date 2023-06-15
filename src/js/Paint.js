@@ -1,10 +1,10 @@
 class Paint {
     static initContext() {
         this.shift = 0;
-        this.canvSize = 1200;
+        //this.canvSize = 1200;
         this.canvas = document.createElement('canvas');
-        this.canvas.width = this.canvSize;
-        this.canvas.height = this.canvSize;
+        this.canvas.width = 1200;
+        this.canvas.height = 1600;
         document.body.appendChild(this.canvas);
         this.canvas.setAttribute("id","picture");
         this.ctx = this.canvas.getContext('2d');
@@ -45,9 +45,9 @@ class Paint {
     static analyzeDataRange(array, fixedRange) {
         if (fixedRange) {
             return {
-                min: -0.2,
-                max: 0.2,
-                mul: 640,
+                min: 0,
+                max: 25,
+                mul: 10,
             }
         }
         let min = array[0][0];
@@ -74,15 +74,22 @@ class Paint {
     }
 
     static pickColorImag(range,value) {
-        let final = (value.real+20)*6;
+        let mod = Math.sqrt(value.re**2 + value.im**2);
+        let final = mod * 3;
         if (final < 0) final = 0;
         if (final > 255) final = 255;
 
-        let finali = (value.imag+20)*6;
-        if (finali < 0) finali = 0;
-        if (finali > 255) finali = 255;
+
+        let col_re = (value.re+20)*4;
+        if (col_re < 0) col_re = 0;
+        if (col_re > 255) col_re = 255;
+
+        let col_im = (value.im+20)*4;
+        if (col_im < 0) col_im = 0;
+        if (col_im > 255) col_im = 255;
+
         // /console.log(value.real, final);
-        return 'rgb('+final+','+final+','+finali+')';
+        return 'rgb('+final+','+col_re+','+col_im+')';
     }
 
     static drawPolarImage(array,stepAngle, rayres, bitmapSize, shX = 0, shY = 0, scale = 1, imaginary = false, fixedRange = false) {

@@ -69,7 +69,7 @@ class VirtualScanner {
             }
         }
 
-        return raysum / bitmapSize;
+        return raysum // bitmapSize;
     }
 
     static bitmapToPole(bitmap, raysResolution, numOfPhotos, deltaAngle = null, quickMode = false) {
