@@ -36,8 +36,6 @@ class Processing {
     static rampFilter(signal) {
         const spectrum = fft(signal);
         const N = spectrum.length;
-
-        // Tworzenie maski filtru rampowego
         const rampFilterMask = new Array(N);
         const middleIndex = Math.floor(N / 2);
 
@@ -45,30 +43,25 @@ class Processing {
             rampFilterMask[i] = 1 - Math.abs(i - middleIndex) / middleIndex;
         }
 
-        // Mnożenie widma sygnału przez maskę filtru rampowego
         for (let i = 0; i < N; i++) {
             spectrum[i].re *= rampFilterMask[i];
             spectrum[i].im *= rampFilterMask[i];
         }
 
-        // Obliczanie odwrotnej DFT (iDFT) przefiltrowanego widma
         const filteredSignal = this.ifftReal(spectrum);
 
         return filteredSignal;
     }
 
     static transposeArray(array) {
-        // Sprawdź rozmiary tablicy wejściowej
         const rows = array.length;
         const cols = array[0].length;
 
-        // Inicjalizuj pustą tablicę wynikową
         const transposedArray = new Array(cols);
         for (let i = 0; i < cols; i++) {
             transposedArray[i] = new Array(rows);
         }
 
-        // Przejdź przez elementy tablicy wejściowej i przepisz do tablicy wynikowej
         for (let i = 0; i < rows; i++) {
             for (let j = 0; j < cols; j++) {
                 transposedArray[j][i] = array[i][j];

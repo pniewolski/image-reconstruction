@@ -2,93 +2,6 @@ import Paint from "./Paint.js";
 
 class Geometry {
 
-    static simpleIntersect(pointA, pointB,line, pointP) {
-
-        //let line = this.lineFrom2Points(pointA,pointB);
-        let eq = line.a*pointP.x + line.b*pointP.y + line.c;
-        if (Math.abs(eq) > 1) return 0;
-        else return 1;
-
-        // Oblicz odległość między punktami A i P
-        const distanceAP = Math.sqrt(
-            Math.pow(pointP.x - pointA.x, 2) + Math.pow(pointP.y - pointA.y, 2)
-        );
-
-        // Oblicz odległość między punktami A i B
-        const distanceAB = Math.sqrt(
-            Math.pow(pointB.x - pointA.x, 2) + Math.pow(pointB.y - pointA.y, 2)
-        );
-
-        // Oblicz odległość między punktami B i P
-        const distanceBP = Math.sqrt(
-            Math.pow(pointP.x - pointB.x, 2) + Math.pow(pointP.y - pointB.y, 2)
-        );
-
-        // Sprawdź warunek, czy punkt P leży na odcinku z dokładnością do 1
-        if (Math.abs(distanceAP + distanceBP - distanceAB) <= 0.1) {
-            return 1;
-        } else {
-            return 0;
-        }
-    }
-
-    static lineFrom2Points(p1, p2) {
-        let a = p1.y - p2.y;
-        let b = - p1.x + p2.x;
-        let c = p1.x * p2.y - p2.x * p1.y;
-        return { a: a, b: b, c: c };
-    }
-
-    static lineSquareIntersect(l1, l2, sq1) {
-
-        let line = this.lineFrom2Points(l1,l2);
-        let eq = line.a*sq.x + line.b*sq.y + line.c;
-        if (Math.abs(eq) > 1) return 0;
-
-
-        let p1 = {x: sq1.x, y: sq1.y};
-        let p2 = {x: sq1.x+1, y: sq1.y};
-        let p3 = {x: sq1.x+1, y: sq1.y+1};
-        let p4 = {x: sq1.x, y: sq1.y+1};
-
-        let i1 = this.lineIntersect(l1, l2, p1, p2);
-        let i2 = this.lineIntersect(l1, l2, p2, p3);
-        let i3 = this.lineIntersect(l1, l2, p3, p4);
-        let i4 = this.lineIntersect(l1, l2, p4, p1);
-
-        let points = [];
-        if (i1) points.push(i1);
-        if (i2) points.push(i2);
-        if (i3) points.push(i3);
-        if (i4) points.push(i4);
-
-        if (points.length == 4) console.log("4!!!")
-        if (points.length != 2) return 0;
-        return this.distanceTwoPoints(points[0], points[1]);
-    }
-
-    static distanceTwoPoints(t, p) {
-        return Math.sqrt((t.x - p.x) ** 2 + (t.y - p.y) ** 2);
-    }
-
-    static lineIntersect(p1, p2, p3, p4) {
-        if ((p1.x === p2.x && p1.y === p2.y) || (p3.x === p4.x && p3.y === p4.y)) {
-            return false;
-        }
-        let denominator = ((p4.y - p3.y) * (p2.x - p1.x) - (p4.x - p3.x) * (p2.y - p1.y))
-        if (denominator === 0) {
-            return false;
-        }
-        let ua = ((p4.x - p3.x) * (p1.y - p3.y) - (p4.y - p3.y) * (p1.x - p3.x)) / denominator
-        let ub = ((p2.x - p1.x) * (p1.y - p3.y) - (p2.y - p1.y) * (p1.x - p3.x)) / denominator
-        if (ua < 0 || ua > 1 || ub < 0 || ub > 1) {
-            return false;
-        }
-        let x = p1.x + ua * (p2.x - p1.x)
-        let y = p1.y + ua * (p2.y - p1.y)
-        return { x: x, y: y }
-    }
-
     static polarCoordsToCartesian(cartesianDimension,deltaAngle, data) {
         let centerXy = cartesianDimension/2;
         let result = [];
@@ -159,22 +72,6 @@ class Geometry {
         }
 
         return data[bestSample][bestPoint];
-    }
-
-    static multiplyResolution(input, mul) {
-        let result = [];
-        for (let x = 0; x<input.length; x++) {
-            let subresult = [];
-            for (let y=0; y<input[x].length; y++) {
-                for (let a = 0; a< mul; a++) {
-                    subresult.push(input[x][y]);
-                }
-            }
-            for (let a = 0; a< mul; a++) {
-                result.push(subresult);
-            }
-        }
-        return result;
     }
 
 }

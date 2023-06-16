@@ -1,14 +1,16 @@
+import ImageManipulation from "./ImageManipulation.js";
+
 class ImageUploader {
 
-    static convertImageToMatrix(image) {
+    static convertImageToMatrix(image, scaledSize = 256) {
         const canvas = document.getElementById("hiddencanvas");
         const context = canvas.getContext("2d");
         context.clearRect(0, 0, canvas.width, canvas.height);
-        canvas.width = image.width;
-        canvas.height = image.height;
-        context.drawImage(image, 0, 0);
+        canvas.width = scaledSize;
+        canvas.height = scaledSize;
+        context.drawImage(image, 0, 0, scaledSize, scaledSize);
         const imageData = context.getImageData(0, 0, canvas.width, canvas.height).data;
-        const matrix = [];
+        let matrix = [];
 
         for (let i = 0; i < canvas.height; i++) {
             const row = [];
@@ -23,6 +25,8 @@ class ImageUploader {
             }
             matrix.push(row);
         }
+
+        matrix = ImageManipulation.cutoffEdges(matrix,0);
 
         return matrix;
     }
