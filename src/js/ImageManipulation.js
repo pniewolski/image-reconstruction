@@ -87,6 +87,19 @@ class ImageManipulation {
         return result;
     }
 
+    static processSinogramAdditive(sinogram, angleStep, anglesCount, start, stop, currentProgress) {
+        if (start == 0) {
+            currentProgress = this.getImageFromSinogram(sinogram,0,angleStep);
+        }
+        for (let n=1; n<anglesCount; n++) {
+            if (n<start || n>=stop) continue;
+            let current = this.getImageFromSinogram(sinogram,n,angleStep);
+            currentProgress = this.sumArrays(currentProgress,current);
+        }
+        currentProgress = this.cutoffEdges(currentProgress);
+        return currentProgress;
+    }
+
     static shiftArray(inputArr) {
         let shiftVal = Math.floor(inputArr.length/2);
         let shiftValY = Math.floor(inputArr[0].length/2);

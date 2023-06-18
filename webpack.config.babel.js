@@ -1,7 +1,8 @@
 import path from 'path';
 
 export default {
-    entry: './src/js/test.js',
+    entry: './src/js/App.js',
+    mode: 'development',
     output: {
         filename: 'bundle.js',
         path: 'C:\\ctsim\\compiledSource\\',

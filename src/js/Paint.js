@@ -7,16 +7,60 @@ class Paint {
         document.body.appendChild(this.canvas);
         this.canvas.setAttribute("id",id);
         this.ctx = this.canvas.getContext('2d');
-        console.log("ok")
         return this.ctx;
     }
 
-    static drawTestImage(ctx, bitmap, shX = 0, shY = 0, scale = 1, imaginary = false) {
+    static createText(id,text) {
+        const divItem = document.createElement('div');
+        divItem.setAttribute("id",id);
+        divItem.setAttribute("style","display:none");
+        const newContent = document.createTextNode(text);
+
+
+        document.body.appendChild(divItem);
+        divItem.appendChild(newContent);
+    }
+
+    static createChooseBtn() {
+        const divItem = document.createElement('div');
+        divItem.id = 'choose_btns';
+
+        const button1 = document.createElement('button');
+        button1.id = 'method1';
+        button1.textContent = 'metoda projekcji wstecznej (back projection)';
+
+        const button2 = document.createElement('button');
+        button2.id = 'method2';
+        button2.textContent = 'metoda projekcji wstecznej z filtracją (back projection with filter)';
+
+        const button3 = document.createElement('button');
+        button3.id = 'method3';
+        button3.textContent = 'odwrotna transformata Radona i twierdzenie rzutu Fouriera (Fourier slice)';
+
+
+        document.body.appendChild(divItem);
+        divItem.appendChild(button1);
+        divItem.appendChild(button2);
+        divItem.appendChild(button3);
+
+        return {button1,button2, button3};
+    }
+
+    static drawTestImage(ctx, bitmap, shX = 0, shY = 0, scale = 1, imaginary = false, start = false, stop=false, maxw = false) {
         let range = imaginary ? 0 : this.analyzeDataRange(bitmap);
+        let scaleX = 1;
+        if (maxw !== false) {
+            scaleX = maxw / bitmap.length;
+        }
         for (let x = 0; x < bitmap.length; x++) {
+            if (start!==false && stop!==false) {
+                if (x<start || x>stop) {
+                    continue;
+                }
+            }
             for (let y = 0; y < bitmap[x].length; y++) {
                 ctx.fillStyle = imaginary ? this.pickColorImag(range,bitmap[x][y]) : this.pickColor(range,bitmap[x][y]);
-                ctx.fillRect(x*scale+this.shift+shX, y*scale+this.shift+shY, scale, scale);
+                ctx.fillRect(x*scaleX*scale+this.shift+shX, y*scale+this.shift+shY, scale, scale);
             }
         }
     }
@@ -63,15 +107,22 @@ class Paint {
         return 'rgb('+final+','+col_re+','+col_im+')';
     }
 
-    static drawPolarImage(ctx, array,stepAngle, rayres, bitmapSize, shX = 0, shY = 0, scale = 1, imaginary = false, fixedRange = false) {
+    static drawPolarImage(ctx, array,stepAngle, rayres, bitmapSize, shX = 0, shY = 0, scale = 1, imaginary = false, fixedRange = false, start = false, stop = false) {
         let halfBitmap = bitmapSize / 2;
         let center = {
             x: halfBitmap,
             y: halfBitmap,
         };
+
         let range = imaginary ? 0 : this.analyzeDataRange(array, fixedRange);
         let angle = 0 - stepAngle/2 + Math.PI/2;
         for (let a = 0; a< array.length; a++) {
+            if (start!==false && stop!==false) {
+                if (a<start || a>stop) {
+                    angle += stepAngle;
+                    continue;
+                }
+            }
             let startAngle = angle;
             let endAngle = angle + stepAngle;
 

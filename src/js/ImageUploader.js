@@ -2,7 +2,7 @@ import ImageManipulation from "./ImageManipulation.js";
 
 class ImageUploader {
 
-    static convertImageToMatrix(image, scaledSize = 256) {
+    static convertImageToMatrix(image, scaledSize = 512) {
         const canvas = document.getElementById("hiddencanvas");
         const context = canvas.getContext("2d");
         context.clearRect(0, 0, canvas.width, canvas.height);
@@ -31,11 +31,11 @@ class ImageUploader {
         return matrix;
     }
 
-    static handleImageUpload(event,callback) {
+    static handleImageUpload(event, scaledSize, callback) {
         const file = event.target.files[0];
         const image = new Image();
         image.onload = function() {
-            const matrix = ImageUploader.convertImageToMatrix(image);
+            const matrix = ImageUploader.convertImageToMatrix(image, scaledSize);
             console.log(matrix);
             callback(matrix);
         };
