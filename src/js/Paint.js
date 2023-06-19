@@ -14,6 +14,7 @@ class Paint {
         const divItem = document.createElement('div');
         divItem.setAttribute("id",id);
         divItem.setAttribute("style","display:none");
+        divItem.setAttribute("class","infotext");
         const newContent = document.createTextNode(text);
 
 
@@ -21,27 +22,28 @@ class Paint {
         divItem.appendChild(newContent);
     }
 
-    static createChooseBtn() {
+    static createChooseBtn(buttonsToShow) {
         const divItem = document.createElement('div');
         divItem.id = 'choose_btns';
+        divItem.setAttribute("class","infotext");
 
         const button1 = document.createElement('button');
         button1.id = 'method1';
-        button1.textContent = 'metoda projekcji wstecznej (back projection)';
+        button1.textContent = '1. metoda projekcji wstecznej ';
 
         const button2 = document.createElement('button');
         button2.id = 'method2';
-        button2.textContent = 'metoda projekcji wstecznej z filtracją (back projection with filter)';
+        button2.textContent = '2. metoda projekcji wstecznej z filtracją';
 
         const button3 = document.createElement('button');
         button3.id = 'method3';
-        button3.textContent = 'odwrotna transformata Radona i twierdzenie rzutu Fouriera (Fourier slice)';
+        button3.textContent = '3. odwrotna transformata Radona i twierdzenie o rzucie Fouriera';
 
 
         document.body.appendChild(divItem);
-        divItem.appendChild(button1);
-        divItem.appendChild(button2);
-        divItem.appendChild(button3);
+        if (buttonsToShow.b1) divItem.appendChild(button1);
+        if (buttonsToShow.b2) divItem.appendChild(button2);
+        if (buttonsToShow.b3) divItem.appendChild(button3);
 
         return {button1,button2, button3};
     }

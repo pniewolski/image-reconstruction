@@ -2,13 +2,54 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>CT SIM</title>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-P33ZH90CMC"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'G-P33ZH90CMC');
+    </script>
+    <meta charset="UTF-8">
+    <title>Symulator objaśniający działanie tomografu</title>
+    <link rel="stylesheet" href="img/main.css">
+    <link rel="stylesheet" href="https://aplikacje.top/css/header.css">
 
 </head>
 <body>
-    <input type="file" id="imageInput" accept="image/png">
+
+
+    <div class="appHeader">
+        <a href="https://aplikacje.top/">
+            <img src="https://aplikacje.top/img/logo.png">
+        </a>
+        <div class="appNameContainer">
+            <div class="appName">
+                Jak działa tomograf?
+            </div>
+
+            <div class="appDesc">
+                Wybierz plik ze swoim zdjęciem i zobacz jak działają algorytmy.
+            </div>
+        </div>
+    </div>
+
+
+    <div class="infotext">Aplikacja ta prezentuje w jaki sposób urządzenia takie jak tomograf generują obraz. Wybierz poniżej plik ze swojego komputera. Może być to zdjęcie lub obrazek. Najlepiej jesli obrazek będzie kwadratowy.</div>
+    <input class="infotext" type="file" id="imageInput" accept="image">
     <canvas id="hiddencanvas" style="display: none;"></canvas>
 
     <script type="module" src="compiledSource/bundle.js"></script>
+
+    <div class="infotextct">
+		<span>Strona jest częścią projektu <a href="https://aplikacje.top">aplikacje.top</a>. Niekomercyjnego i
+			hobbystycznego pomysłu polegającego na tworzeniu aplikacji o charakterze edukacyjnym oraz użytkowym.
+			Nieodłączną częścią projektu jest <a href="https://www.youtube.com/mazaq86">mój kanał na Youtube</a>, gdzie
+			tłumaczę wiele zagadnień z zakresu programowania, ale również techniki i fizyki. <br>Strona jest darmowa i
+			bez reklam więc możesz to docenić robiąc mi przelew <a href="https://paypal.me/mazaq1">przez
+				PayPal</a>. Źródła dostępne <a href="https://github.com/pniewolski/image-reconstruction">na Githubie</a></span>
+    </div>
+
 </body>
 </html>

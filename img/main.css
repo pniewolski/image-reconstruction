@@ -1,0 +1,56 @@
+body {
+    font-family: Verdana, Arial, Helvetica;
+    margin:0;
+    padding: 0;
+    background-color: #2a3431;
+    box-sizing: border-box;
+    overflow-x: hidden;
+}
+
+@keyframes slidein {
+    from {
+        margin-left: 100%;
+        width: 300%;
+    }
+
+    to {
+        margin-left: 0%;
+        width: 100%;
+    }
+}
+
+.infotext {
+    box-sizing: border-box;
+    font-size:16px;
+    margin: 10px 0;
+    padding: 20px;
+    border-width: 0 0 0 20px;
+    border-style:solid;
+    border-color: #9b5b47;
+    border-radius: 4px;
+    background-color: #4c605a;
+    color: white;
+    animation: slidein 1s forwards;
+}
+
+canvas {
+    max-width: 100%;
+    margin: 20px;
+}
+
+.infotext button {
+    margin: 10px;
+}
+
+.infotextct {
+    bottom: 0;
+    width: 100%;
+    padding: 20px;
+    font-size: 11px;
+    color: white;
+}
+
+.infotextct a {
+    color: white;
+    text-decoration: underline;
+}
